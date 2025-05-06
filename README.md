@@ -1,5 +1,4 @@
-# to-do-list
-adding tasks and toggling
+
 # To-Do List Web App
 
 This is a simple and interactive To-Do List web application built using HTML, CSS, and JavaScript. It allows users to add, edit, complete, and manage tasks with automatic saving using localStorage.
