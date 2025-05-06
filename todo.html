@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To-Do List</title>
+  <style>
+    :root {
+      --gradient: linear-gradient(180deg, rgba(45, 112, 125, 0.73) 0%, #163e92 100%);
+      --dark: #001747;
+      --grey: #b1bacb;
+      --grey-border: rgba(210, 210, 210, 0.75);
+      --grey-light: #eeeeee;
+      --blue: #2d70fd;
+      --green: #00d8a7;
+      --white: #ffffff;
+      --black: #080808;
+    }
+
+    body {
+      background: var(--gradient);
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Exo 2", sans-serif;
+    }
+
+    h2 {
+      text-transform: uppercase;
+      color: var(--dark);
+      text-align: center;
+    }
+
+    .todo {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      border-radius: 2rem;
+      background: var(--white);
+      padding: 2rem;
+      width: 90%;
+      max-width: 30rem;
+      box-shadow: 0 1rem 3rem 1rem rgba(0, 23, 71, 0.15);
+    }
+
+    .input {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .input-field,
+    .date-field,
+    .time-field {
+      border: 0.06rem solid #d2d2d2bf;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-family: "Exo 2", sans-serif;
+    }
+
+    .date-field,
+    .time-field {
+      width: 48%;
+      display: inline-block;
+      margin-right: 2%;
+    }
+
+    .btn {
+      color: var(--white);
+      font-size: 1.1rem;
+      padding: 0.7rem 1.5rem;
+      border-radius: 0.3rem;
+      background-color: var(--blue);
+      border: none;
+      margin-top: 1rem;
+      font-family: "Exo 2", sans-serif;
+      cursor: pointer;
+    }
+
+    ul {
+      padding: 0;
+      margin: 0;
+      height: 15rem;
+      overflow-y: auto;
+      border: 1px solid var(--grey-border);
+      border-radius: 0.5rem;
+      font-family: "Exo 2", sans-serif;
+    }
+
+    li {
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 0.06rem solid var(--grey-border);
+    }
+
+    li:last-child {
+      border-bottom: none;
+    }
+
+    .disabled {
+      text-decoration: line-through;
+      color: #8f98a8;
+    }
+
+    .todo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .todo-checkbox {
+      margin-right: 0.5rem;
+    }
+
+    .counter {
+      border: 0.06rem solid var(--grey-light);
+      margin-top: 1rem;
+    }
+
+    .counter-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .counter-container p {
+      margin: 0;
+    }
+
+    .counter-container button {
+      border: none;
+      background-color: transparent;
+      color: var(--black);
+      font-size: 1rem;
+      font-family: "Exo 2", sans-serif;
+      cursor: pointer;
+    }
+
+    .scroll {
+      scrollbar-width: thin;
+    }
+
+    .scroll::-webkit-scrollbar {
+      width: 0.6rem;
+    }
+
+    .scroll::-webkit-scrollbar-thumb {
+      background-color: var(--blue);
+      border-radius: 0.5rem;
+    }
+
+    .scroll::-webkit-scrollbar-track {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="todo">
+    <h2>To-Do List</h2>
+    <div class="input">
+      <input type="text" class="input-field" id="todoInput" placeholder="Add a new todo" />
+      <input type="date" class="date-field" id="todoDate" />
+      <input type="time" class="time-field" id="todoTime" />
+      <button class="btn" onclick="addTodo()">Add</button>
+    </div>
+    <ul class="scroll" id="todoList"></ul>
+    <div>
+      <hr class="counter" />
+      <div class="counter-container">
+        <p><span id="todoCount">0</span> items total</p>
+        <button id="deleteButton" onclick="clearTodos()">Delete All</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const todoInput = document.getElementById("todoInput");
+    const todoDate = document.getElementById("todoDate");
+    const todoTime = document.getElementById("todoTime");
+    const todoList = document.getElementById("todoList");
+    const todoCount = document.getElementById("todoCount");
+
+    function addTodo() {
+      const task = todoInput.value.trim();
+      const date = todoDate.value;
+      const time = todoTime.value;
+
+      if (!task) return;
+
+      const li = document.createElement("li");
+      const container = document.createElement("div");
+      container.className = "todo-container";
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.className = "todo-checkbox";
+      checkbox.onclick = () => {
+        text.classList.toggle("disabled", checkbox.checked);
+      };
+
+      const text = document.createElement("span");
+      text.textContent = `${task} (${date} ${time})`;
+
+      container.appendChild(checkbox);
+      container.appendChild(text);
+      li.appendChild(container);
+      todoList.appendChild(li);
+
+      todoInput.value = "";
+      todoDate.value = "";
+      todoTime.value = "";
+      updateCount();
+    }
+
+    function clearTodos() {
+      todoList.innerHTML = "";
+      updateCount();
+    }
+
+    function updateCount() {
+      todoCount.textContent = todoList.children.length;
+    }
+  </script>
+</body>
+
+</html>
